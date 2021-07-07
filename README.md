@@ -1,5 +1,6 @@
 # Website
 Login users with sessions, Database mysql, php, ajax query
+Per avviare il sitoweb correttamente bisogna prima implementare il database in maniera corretta 
 
 Sviluppare un applicazione web per gestire una società di catering o di realizzazione di siti web. Le specifiche iniziali per tale applicazione sono:
 1. Gestione utenti (login/logout) con sessioni/cookies in PHP. Al tal fine e' necessario creare nel DB una tabella utenti che possono essere di tipi: amministratore (vedere tutto il sistema come indicato nelle mockup), clienti (vedere i catering/o i siti web da loro commissionati) e ristoranti/sviluppatori (per vedere dopo sono stati venduti i loro prodotti);
