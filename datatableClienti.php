@@ -9,10 +9,10 @@ if($_SESSION["type"] != 1)
 	die("Permesso negato");
 }
 
-$db_host = "151.97.9.185:3307";
-$db_user = "viola_anselmo";
-$db_password = "6610862863";
-$db_database = "viola_anselmo";
+$db_host = "ip";
+$db_user = "user";
+$db_password = "pass";
+$db_database = "db";
 
 // Crea connessione al DB
 $conn = mysqli_connect($db_host, $db_user, $db_password);
