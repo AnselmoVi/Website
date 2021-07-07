@@ -1,0 +1,52 @@
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<h1>Elenco moduli</h1>
+<table id="modulo" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+				<th>Funzione</th>
+				<th>Costo</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+				<th>Funzione</th>
+				<th>Costo</th>
+            </tr>
+        </tfoot>
+    </table>
+	</html>
+<script>
+$(document).ready( function() {
+  $('#modulo').dataTable( {
+    "sAjaxSource": "datatableModuli.php",
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [
+             
+            { "mData": "ID" },
+            { "mData": "NOME"},
+			{ "mData": "FUNZIONE"},
+			{ "mData": "COSTO"},
+            
+        ],
+        
+    });
+} )
+</script>
+<p>
+<a href='home_admin.php'>Torna indietro</a>
+</p>

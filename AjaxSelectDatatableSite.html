@@ -1,0 +1,91 @@
+
+<?php
+
+// Avvia la sessione
+session_start();
+
+// Controlla ruolo
+if($_SESSION["type"] != 1)
+{
+	die("Permesso negato");
+}
+
+?>
+
+<html>
+
+<!--Cerca siti tramite cliente-->
+
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<select id="clienteDropdown">
+</select>
+
+ 
+	 
+	 <table id="sito_web" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Codice</th>
+				<th>Url</th>
+				<th>Data pubblicazione</th>
+                <th>Layout</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Codice</th>
+				<th>Url</th>
+				<th>Data pubblicazione</th>
+                <th>Layout</th>
+            </tr>
+        </tfoot>
+    </table>
+	 
+<script>
+
+
+
+  $('#clienteDropdown').empty();
+     
+    $.ajax({
+            type: "POST",
+            url: "dataSelectClienti.php",
+            success: function(data){
+                var opts = $.parseJSON(data);
+                $.each(opts, function(i, d) {
+                    $('#clienteDropdown').append('<option value="' + d.CLIENTE + '">' + d.CLIENTE + '</option>');
+                });
+            }
+        });
+		
+		$('#clienteDropdown').on('change', function() {
+			 var table = $('#sito_web').dataTable( {
+			 "processing": true,
+				"serverSide": true,
+				"bDestroy": true,
+				"bJQueryUI": true,				 
+				"sAjaxSource": "datatableSitiClienti.php?CLIENTE="+$('#clienteDropdown').val(),
+				"bFilter": false,
+				"dom": "Bfrtip",
+				"responsive": true,
+				"bDestroy": true,				 
+				"aoColumns": [
+					 
+					{ "mData": "CODICE" },
+					{ "mData": "URL" },
+					{ "mData": "DATA_PUBBLICAZIONE"},
+					{ "mData": "LAYOUT"},
+				],
+					
+				});
+			})
+</script>
+<p>
+<a href='riepilogo.php'>Torna indietro</a>
+</p>

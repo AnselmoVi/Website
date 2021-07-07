@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pagina di Login</title>
+<link href="css/styles.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+  <header class="container">
+  	<div class="headerTop">
+        <h1>Pagina di Login</h1>
+        <ul class="socialIcons">
+            <li><a href=""><img src="images/facebookIcon.png" alt="" width="26" height="26"></a></li>
+            <li><a href=""><img src="images/googleIcon.png" alt="" width="26" height="26"></a></li>
+        </ul>
+    </div>
+    
+    <nav>
+        <ul id="navlist">
+            <li id="active"><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="register.html">Registrati</a></li>
+        </ul>
+    </nav>
+  </header>
+
+<script type='text/javascript'>
+function checkForm()
+{
+	// Controlla che username e password non siano vuoti
+	if(document.login_form.username.value == '' ||
+	   document.login_form.password.value == '')
+	{
+		alert('Inserire username e password');
+		return false;
+	}
+	// Se arriviamo qui, tutto ok
+	return true;
+}
+</script>
+<body>
+<section class="container">
+<h3>Login</h3>
+<form name='login_form' action='login.php' method='post' onsubmit='return checkForm()'>
+Username <input type='text' name='username'><br>
+Password <input type='password' name='password'><br>
+<input type='submit'>
+</form>
+<footer class="container">
+    
+</body>
+</html>

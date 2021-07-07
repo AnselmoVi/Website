@@ -1,0 +1,87 @@
+<?php
+
+// Avvia la sessione
+session_start();
+
+// Controlla ruolo
+if($_SESSION["type"] != 1)
+{
+	die("Permesso negato");
+}
+
+?>
+
+
+<html>
+
+<!--Cerca moduli tramite layout-->
+
+<head>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<select id="layoutDropdown">
+</select>
+
+	 <table id="modulo" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Costo</th> 
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Costo</th> 
+            </tr>
+        </tfoot>
+    </table>
+	 
+<script>
+
+
+
+  $('#layoutDropdown').empty();
+     
+    $.ajax({
+            type: "POST",
+            url: "dataSelectLayout.php",
+            success: function(data){
+                var opts = $.parseJSON(data);
+                $.each(opts, function(i, d) {
+                    $('#layoutDropdown').append('<option value="' + d.ID + '">' + d.ID + '</option>');
+                });
+            }
+        });
+		
+		$('#layoutDropdown').on('change', function() {
+			 var table = $('#modulo').dataTable( {
+			 "processing": true,
+				"serverSide": true,
+				"bDestroy": true,
+				"bJQueryUI": true,				 
+				"sAjaxSource": "datatableLayoutModuli.php?ID_LAYOUT="+$('#layoutDropdown').val(),
+				"bFilter": false,
+				"dom": "Bfrtip",
+				"responsive": true,
+				"bDestroy": true,				 
+				"aoColumns": [
+					 
+					{ "mData": "ID" },
+					{ "mData": "NOME"},             
+					{ "mData": "COSTO"},
+				],
+					
+				});
+			})
+</script>
+<p>
+<a href='riepilogo.php'>Torna indietro</a>
+</p>

@@ -1,0 +1,235 @@
+
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<table id="tableClienti" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Codice Fiscale</th>
+                <th>Citt&agrave</th>
+				<th>Indirizzo</th>
+				<th>Telefono</th>
+				<th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                 <th>Codice Fiscale</th>
+                <th>Citt&agrave</th>
+				<th>Indirizzo</th>
+				<th>Telefono</th>
+				<th></th>
+            </tr>
+        </tfoot>
+    </table>
+	
+	
+	<div id="dialog-form" title="Inserisci Sito_Web">
+  <p class="validateTips">Tutti i campi sono richiesti</p>
+ 
+  <form>
+    <fieldset>
+	<p>
+      <label for="name">N Partecipanti</label>
+      
+	  <input type="text" name="npartecipanti" id="npartecipanti" class="text ui-widget-content ui-corner-all">
+      <p>
+	  <label for="email">Costo</label>
+      <input type="text" name="costo" id="costo"  class="text ui-widget-content ui-corner-all">     
+	  <p>
+	  <label for="datepicker">Data</label>
+	  <input type="text" id="datepicker">
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+	<table id="tableLayout" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+				<th>ID</th> 
+                <th>Sviluppatore</th>
+                <th>Costo</th>
+				<th></th>
+            </tr>
+        </thead>
+        
+    </table>
+		
+	
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+    
+  </form>
+</div>
+
+<div id="dialog-form-menu" title="layout">
+  <p class="validateTips">Tutti i campi sono richiesti</p>
+ 
+  <form>
+     
+	<table id="tableModuli" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+			<th>ID</th>
+                <th>Nome</th>
+                <th>Costo</th>
+				 
+            </tr>
+        </thead>
+       
+    </table>
+		
+	
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+     
+    
+  </form>
+</div>
+
+
+	</html>
+<script>
+
+ var idSelectedLayout;
+ var idSelectedUser;
+ 
+ 
+function ShowSiti_web(id)
+{
+	idSelectedUser = id;
+	dialogCatering.dialog( "open" );
+}
+function ShowMenu(id)
+{
+
+	idSelectedMenu = id;
+	dialogMenu.dialog( "open" );
+	$('#tableModuli').dataTable( {
+        "sAjaxSource": "datatableModuli.php?idmenu="+id,
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [             
+            { "mData": "ID" },
+			{ "mData": "Nome" },
+            { "mData": "Costo"},
+			 
+        ],
+        
+    });
+}-
+function InsertSito_web()
+{
+	//chiamata ajax
+	 
+	console.log(idSelectedLayout);
+	console.log(idSelectedUser);
+	
+}
+	
+$(document).ready( function() {
+
+	$( "#datepicker" ).datepicker();
+
+	dialogCatering = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 550,
+      modal: true,
+      buttons: {
+        "Inserisci Sito_web": function() { InsertSitoWeb()},
+        Cancel: function() {
+          dialogSitoWeb.dialog( "close" );
+        }
+      },
+      close: function() {
+        //form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
+      }
+    });
+	
+	dialogMenu = $( "#dialog-form-menu" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 550,
+      modal: true,
+      buttons: {
+        //"Inserisci Sito_Web": function(){ InsertSitoWeb()},
+        Cancel: function() {
+          dialogMenu.dialog( "close" );
+        }
+      },
+      close: function() {
+        //form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
+      }
+    });
+	
+  $('#tableClienti').dataTable( {
+    "sAjaxSource": "datatableClienti.php",
+	"bFilter": true,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [
+             
+            { "mData": "Codice" },
+            { "mData": "Citta"},
+			{ "mData": "Indirizzo"},
+			{ "mData": "Tel"},
+			{ "mData": "button",
+{ "mData": "N_siti",
+{ "mData": "Spesa_Totale",
+			  "mRender": function(data, type, row) 
+						 {									
+							return '<input onclick="ShowSiti_web(\''+row.CF+'\')" type="button" value="Inserisci Sito_Web"/>'
+						 }
+			},
+        ],
+        
+    });
+	$('#tableMenu').dataTable( {
+    "sAjaxSource": "datatableMenu.php",
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,    
+		"rowId": 'ID',
+        "aoColumns": [
+             
+			{ "mData": "ID" },
+			 { "mData": "Sviluppatore" },
+            { "mData": "Costo"},
+			{ "mData": "button",
+			  "mRender": function(data, type, row) {								
+								return "<input onclick='ShowLayout("+row.ID+")' type='button' value='Visualizza Layout'/>"
+								}
+			},
+        ],
+        
+    });
+	
+	$('#tableLayout tbody').on( 'click', 'tr', function () {
+	var table = $('#tableMenu').DataTable();
+	 idSelectedLayout = table.row(this).id();
+	
+	
+	//alert(data.DT_RowId);	
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+	
+	
+	})
+</script>

@@ -1,0 +1,55 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+function filterGlobal () {
+    $('#example').DataTable().search(
+        $('#global_filter').val(),
+        $('#global_regex').prop('checked'),
+        $('#global_smart').prop('checked')
+    ).draw();
+}
+<h1>Elenco Layout</h1>
+<table id="layout" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Costo Totale</th>
+				<th>Sviluppatore</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Costo Totale</th>
+				<th>Sviluppatore</th>
+            </tr>
+        </tfoot>
+    </table>
+	</html>
+<script>
+$(document).ready( function() {
+  $('#layout').dataTable( {
+    "sAjaxSource": "datatableLayout.php",
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [
+             
+            { "mData": "ID" },
+            { "mData": "COSTO_TOTALE"}, 
+            { "mData": "SVILUPPATORE"},
+            
+        ],
+        
+    });
+} )
+</script>
+<p>
+<a href='home_admin.php'>Torna indietro</a>
+</p>

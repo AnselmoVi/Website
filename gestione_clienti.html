@@ -1,0 +1,255 @@
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<table id="tableClienti" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>Codice</th>
+                <th>Citt&agrave</th>
+				<th>Indirizzo</th>
+				<th>Telefono</th>
+				<th></th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                 <th>Codice</th>
+                <th>Citt&agrave</th>
+				<th>Indirizzo</th>
+				<th>Telefono</th>
+				<th></th>
+            </tr>
+        </tfoot>
+    </table>
+	
+	
+	<div id="dialog-form" title="Inserisci sito web">
+  <p class="validateTips">Tutti i campi sono richiesti</p>
+ 
+  <form>
+    <fieldset>
+	<p>
+      <label for="name">URL</label>
+	  <input type="text" name="url" id="url" class="text ui-widget-content ui-corner-all">
+         
+	  <p>
+	  <label for="datepicker">Data Pubblicazione</label>
+	  <input type="text" id="datepicker">
+      <!-- Allow form submission with keyboard without duplicating the dialog button -->
+	<table id="tableLayout" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+				<th>ID</th>
+                <th>Costo</th>
+                <th>Sviluppatore</th>
+				<th></th>
+            </tr>
+        </thead>
+        
+    </table>
+		
+	
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+    </fieldset>
+    
+  </form>
+</div>
+<div id="risultato"></div>
+</div>
+<div id="dialog-form-layout" title="Layout">
+  <p class="validateTips">Tutti i campi sono richiesti</p>
+ 
+  <form>
+     
+	<table id="tableModuli" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+			<th>ID</th>
+            <th>Nome</th>
+			<th>Funzione</th>
+            <th>Costo</th> 
+            </tr>
+        </thead>
+       
+    </table>
+		
+	
+      <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+     
+    
+  </form>
+</div>
+
+
+	</html>
+<script>
+
+ var idSelectedLayout;
+ var idSelectedUser;
+ 
+ 
+function ShowSito(id)
+{
+	idSelectedUser = id;
+	dialogSito.dialog( "open" );
+}
+function ShowLayout(id)
+{
+	idSelectedLayout = id;
+	dialogLayout.dialog( "open" );
+	$('#tableModuli').dataTable( {
+    "sAjaxSource": "datatableModuli.php?id="+id",
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [             
+            { "mData": "ID" },
+			{ "mData": "NOME" },
+			{ "mData": "FUNZIONE" },
+            { "mData": "COSTO"},
+			 
+        ],
+        
+    });
+}
+function InsertSito()
+{
+	//chiamata ajax
+	var url = $( "#url").val();
+	var data = $( "#datepicker" ).val();
+    $.ajax({
+      type: "POST",
+      url: "ins_sito.php",
+
+     data: "url=" + url + "&data=" + data + "&idSelectedUser=" + idSelectedUser + "&idSelectedLayout=" + idSelectedLayout,
+      dataType: "html",
+
+      success: function(msg)
+      {
+        $("#risultato").html(msg); 
+      },
+      error: function()
+      {
+        alert("Chiamata fallita, si prega di riprovare..."); 
+      }
+    });
+	//console.log(idSelectedLayout);
+	//console.log(idSelectedUser);
+	
+}
+	
+$(document).ready( function() {
+
+	$( "#datepicker" ).datepicker({dateFormat: "yy-mm-dd"});
+
+	dialogSito = $( "#dialog-form" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 550,
+      modal: true,
+      buttons: {
+        "Inserisci Sito": function() { InsertSito()},
+        Cancel: function() {
+          dialogSito.dialog( "close" );
+        }
+      },
+      close: function() {
+        //form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
+      }
+    });
+	
+	dialogLayout = $( "#dialog-form-layout" ).dialog({
+      autoOpen: false,
+      height: 500,
+      width: 550,
+      modal: true,
+      buttons: {
+        //"Inserisci Sito": function(){ InsertSito()},
+        Cancel: function() {
+          dialogLayout.dialog( "close" );
+        }
+      },
+      close: function() {
+        //form[ 0 ].reset();
+        //allFields.removeClass( "ui-state-error" );
+      }
+    });
+	
+  $('#tableClienti').dataTable( {
+    "sAjaxSource": "datatableClienti.php",
+	"bFilter": true,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,         
+        "aoColumns": [
+             
+            { "mData": "CODICE" },
+            { "mData": "CITTA"},
+			{ "mData": "INDIRIZZO"},
+			{ "mData": "TELEFONO"},
+                          { "mData": "N_SITI"},
+			{ "mData": "SPESA_TOTALE"},
+			{ "mData": "button",
+			  "mRender": function(data, type, row) 
+						 {									
+							return '<input onclick="ShowSito(\''+row.Codice+'\')" type="button" value="Inserisci Sito"/>'
+						 }
+			},
+        ],
+        
+    });
+	$('#tableLayout').dataTable( {
+    "sAjaxSource": "datatableLayout.php",
+	"bFilter": false,
+        "dom": "Bfrtip",
+        "responsive": true,
+        "bDestroy": true,    
+		"rowId": 'ID',
+        "aoColumns": [
+             
+			{ "mData": "ID" },
+            { "mData": "COSTO_TOTALE"},
+			{ "mData": "SVILUPPATORE" },
+			{ "mData": "button",
+			  "mRender": function(data, type, row) {								
+								return "<input onclick='ShowLayout("+row.ID+")' type='button' value='Composizione Layout'/>"
+								}
+			},
+        ],
+        
+    });
+	
+	$('#tableLayout tbody').on( 'click', 'tr', function () {
+	var table = $('#tableLayout').DataTable();
+	 idSelectedLayout = table.row(this).id();
+	
+	
+	//alert(data.DT_RowId);	
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        }
+        else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+	
+	
+	})
+	
+</script>
+
+
+<p>
+<a href='home_admin.php'>Torna alla Home</a>
+</p>

@@ -1,0 +1,84 @@
+<?php
+
+// Avvia la sessione
+session_start();
+
+// Controlla ruolo
+if($_SESSION["type"] != 1)
+{
+	die("Permesso negato");
+}
+
+?>
+
+<html>
+
+<!--Cerca layout tramite sviluppatore-->
+
+<head>
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+	<script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js">
+	</script>
+	<script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js">
+	</script>
+</head>
+<select id="sviluppatoreDropdown">
+</select>
+
+ 
+	 
+	 <table id="layout" class="display" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Costo Totale</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>ID</th>
+                <th>Costo Totale</th>
+            </tr>
+        </tfoot>
+    </table>
+	 
+<script>
+
+
+
+  $('#sviluppatoreDropdown').empty();
+     
+    $.ajax({
+            type: "POST",
+            url: "dataSelectSviluppatori.php",
+            success: function(data){
+                var opts = $.parseJSON(data);
+                $.each(opts, function(i, d) {
+                    $('#sviluppatoreDropdown').append('<option value="' + d.SVILUPPATORE + '">' + d.SVILUPPATORE + '</option>');
+                });
+            }
+        });
+		
+		$('#sviluppatoreDropdown').on('change', function() {
+			 var table = $('#layout').dataTable( {
+			 "processing": true,
+				"serverSide": true,
+				"bDestroy": true,
+				"bJQueryUI": true,				 
+				"sAjaxSource": "datatableLayoutSviluppatore.php?SVILUPPATORE="+$('#sviluppatoreDropdown').val(),
+				"bFilter": false,
+				"dom": "Bfrtip",
+				"responsive": true,
+				"bDestroy": true,				 
+				"aoColumns": [
+					 
+					{ "mData": "ID" },
+					{ "mData": "COSTO_TOTALE"},
+				],
+					
+				});
+			})
+</script>
+<p>
+<a href='riepilogo.php'>Torna indietro</a>
+</p>
